@@ -1,5 +1,6 @@
 import pandas as pd
 from solve_r3 import match_date_to_column
+from data_process import process_data
 
 
 def assert_equals(first, second):
@@ -46,7 +47,9 @@ def test_match_date(data):
 
 
 def main():
-    data = pd.read_csv('combined_data.csv')
+    zillow_data = pd.read_csv('zillow_data.csv')
+    realtor_data = pd.read_csv('realtor_historical.csv')
+    data = process_data(zillow_data, realtor_data)
     data['index'] = data.index
     test_match_date(data)
     processed_data = pd.read_csv('r3_data.csv')

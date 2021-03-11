@@ -1,7 +1,8 @@
-from data_process import both
+from data_process import process_data
 from calendar import monthrange
 import math
 import plotly.express as px
+import pandas as pd
 
 
 def plot_animation(plot_data):
@@ -78,7 +79,9 @@ def filter_data(data):
 
 
 def main():
-    new_data = both
+    zillow_data = pd.read_csv('zillow_data.csv')
+    realtor_data = pd.read_csv('realtor_historical.csv')
+    new_data = process_data(zillow_data, realtor_data)
     plot_data = filter_data(new_data)
     plot_animation(plot_data)
 
