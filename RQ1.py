@@ -3,24 +3,8 @@ import plotly.graph_objs as go
 from calendar import monthrange
 from datetime import datetime
 import math
-
-
-def combine_data(zillow, realtor):
-    zillow_data_clean = zillow
-    zillow_data_clean['county_z'] = zillow_data_clean['RegionName'].str.split(' County').str[0].str.lower()
-    realtor_data_clean = realtor
-    realtor_data_clean['county_r'] = realtor_data_clean['county_name'].str.split(', ').str[0].str.lower()
-    realtor_data_clean['state_r'] = realtor_data_clean['county_name'].str.split(', ').str[1].str.upper()
-
-    combined = pd.merge(zillow_data_clean,
-                        realtor_data_clean,
-                        how='outer',
-                        left_on=['county_z', 'StateName'],
-                        right_on=['county_r', 'state_r'])
-
-    x = combined.loc[:, '1996-01-31':'2021-01-31']
-    y = combined.loc[:, ['month_date_yyyymm', 'median_listing_price', 'active_listing_count', 'median_days_on_market', 'total_listing_count', 'county_r', 'state_r']]
-    return pd.concat([x, y], axis=1)
+from data_process import process_data
+from solve_r3 import match_date_to_column
 
 
 def reformat_date(date):
@@ -30,19 +14,6 @@ def reformat_date(date):
     month = "{:02d}".format(int(date % 100))
     date = datetime(year, int(month), 1)
     return date.strftime('%Y-%m')
-
-
-def match_date_to_column(arg, data):
-    if math.isnan(arg.month_date_yyyymm):
-        return math.nan
-    date = arg.month_date_yyyymm
-    row_num = arg['index']
-    year = int(date // 100)
-    month = int(date % 100)
-    num_days = monthrange(year, month)[1]
-    month = "{:02d}".format(int(date % 100))
-    full_date = str(year) + '-' + month + '-' + str(num_days)
-    return data.loc[row_num, full_date]
 
 
 def listing_price(arg, data):
@@ -154,9 +125,9 @@ def plot_data(data):
       
 
 def main():
-    zillow_data = pd.read_csv('zillow.csv')
-    realtor_data = pd.read_csv('realtor_historical_project.csv')
-    rq1 = combine_data(zillow_data, realtor_data)
+    zillow_data = pd.read_csv('zillow_data.csv')
+    realtor_data = pd.read_csv('realtor_historical.csv')
+    rq1 = process_data(zillow_data, realtor_data)
     rq1 = transform_data(rq1)
     plot_data(rq1)
 
