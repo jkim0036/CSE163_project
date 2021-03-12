@@ -1,6 +1,5 @@
 import pandas as pd
 import plotly.graph_objs as go
-from calendar import monthrange
 from datetime import datetime
 import math
 from data_process import process_data
@@ -27,7 +26,8 @@ def listing_price(arg, data):
 
 def transform_data(data):
     dates = data.loc[:, '2016-01-31':'2021-01-31']
-    prices = data.loc[:, ['month_date_yyyymm', 'median_listing_price', 'state_r']]
+    prices = data.loc[:, ['month_date_yyyymm', 'median_listing_price',
+                      'state_r']]
     rq1 = pd.concat([dates, prices], axis=1)
     rq1['index'] = rq1.index
     rq1['zillow_avg_price'] = rq1.apply(match_date_to_column, data=rq1, axis=1)
@@ -41,7 +41,8 @@ def transform_data(data):
     rq1 = rq1.loc[:, ['month_date_yyyymm', 'state_r', '%_change_mm']]
     rq1 = rq1.rename(columns={'month_date_yyyymm': 'date', 'state_r': 'State'})
     rq1 = rq1.set_index('date')
-    return pd.pivot_table(rq1, values='%_change_mm', columns='State', index='date')
+    return pd.pivot_table(rq1, values='%_change_mm', columns='State',
+                          index='date')
 
 
 def plot_data(data):
@@ -59,7 +60,8 @@ def plot_data(data):
     fig.update_layout(
         width=1500,
         height=900,
-        title_text='Percent Change on Median House Prices (month to month) from 2016 -2021',
+        title_text='Percent Change on Median House Prices (month to month) \
+                    from 2016 -2021',
         xaxis_title='Date',
         yaxis_title='Percent Change'
     )
@@ -71,58 +73,69 @@ def plot_data(data):
                     dict(
                         method='restyle',
                         label='Far West',
-                        args=[{'y': [data['WA'], data['OR'], data['CA'], data['NV'], data['HI']]},
-                              {'showlegend':True}]
+                        args=[{'y': [data['WA'], data['OR'], data['CA'],
+                                     data['NV'], data['HI']]},
+                              {'showlegend': True}]
                     ),
                     dict(
                         method='restyle',
                         label='Rocky Mountain',
-                        args=[{'y': [data['ID'], data['MT'], data['WY'], data['UT'], data['CO']]},
-                              {'showlegend':True}]
+                        args=[{'y': [data['ID'], data['MT'], data['WY'],
+                                     data['UT'], data['CO']]},
+                              {'showlegend': True}]
                     ),
                     dict(
                         method='restyle',
                         label='Southwest',
-                        args=[{'y': [data['AZ'], data['NM'], data['TX'], data['OK']]},
-                              {'showlegend':True}]
+                        args=[{'y': [data['AZ'], data['NM'], data['TX'],
+                                     data['OK']]},
+                              {'showlegend': True}]
                     ),
                     dict(
                         method='restyle',
                         label='Plains',
-                        args=[{'y': [data['ND'], data['SD'], data['NE'], data['KS'], data['MN'], data['IA'], data['MO']]},
-                              {'showlegend':True}]
+                        args=[{'y': [data['ND'], data['SD'], data['NE'],
+                                     data['KS'], data['MN'], data['IA'],
+                                     data['MO']]},
+                              {'showlegend': True}]
                     ),
                     dict(
                         method='restyle',
                         label='Great Lakes',
-                        args=[{'y': [data['WI'], data['IL'], data['IN'], data['OH'], data['MI']]},
-                              {'showlegend':True}]
+                        args=[{'y': [data['WI'], data['IL'], data['IN'],
+                                     data['OH'], data['MI']]},
+                              {'showlegend': True}]
                     ),
                     dict(
                         method='restyle',
                         label='Southeast',
-                        args=[{'y': [data['AR'], data['MS'], data['AL'], data['GA'], data['FL'], data['TN'], data['KY'], data['WV'], data['VA'], data['NC'], data['SC']]},
-                              {'showlegend':True}]
+                        args=[{'y': [data['AR'], data['MS'], data['AL'],
+                                     data['GA'], data['FL'], data['TN'],
+                                     data['KY'], data['WV'], data['VA'],
+                                     data['NC'], data['SC']]},
+                              {'showlegend': True}]
                     ),
                     dict(
                         method='restyle',
                         label='Mideast',
-                        args=[{'y': [data['NY'], data['PA'], data['NJ'], data['DE'], data['MD']]},
-                              {'showlegend':True}]
+                        args=[{'y': [data['NY'], data['PA'], data['NJ'],
+                                     data['DE'], data['MD']]},
+                              {'showlegend': True}]
                     ),
                     dict(
                         method='restyle',
                         label='New England',
-                        args=[{'y': [data['NH'], data['ME'], data['VT'], data['MA'], data['RI'], data['CT']]},
-                              {'showlegend':True}]
+                        args=[{'y': [data['NH'], data['ME'], data['VT'],
+                                     data['MA'], data['RI'], data['CT']]},
+                              {'showlegend': True}]
                     )
                 ]),
             )
-        ]  
+        ]
     )
 
-    fig.show()  
-      
+    fig.show()
+
 
 def main():
     zillow_data = pd.read_csv('zillow_data.csv')
