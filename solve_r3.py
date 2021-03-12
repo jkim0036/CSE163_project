@@ -1,11 +1,25 @@
-from data_process import process_data
+'''
+CSE 163
+James Chen, Julia Kim, Minjie Kim
+
+A file that examines the changes of house prices and
+days on the market for houses in each county in the
+United States over the course of the pandemic (2019-2020)
+by parsing data and plotting an animated graph to show
+the results.
+'''
+
 from calendar import monthrange
 import math
 import plotly.express as px
-import pandas as pd
 
 
 def plot_animation(plot_data):
+    '''
+    Plots an animated graph showing the changes in house
+    prices and days on the market
+    over the period of the pandemic (2019-2020).
+    '''
     # inverse data to get dates from 2019-2020
     plot_data = plot_data.iloc[::-1]
     plot = px.scatter(plot_data,
@@ -23,12 +37,17 @@ def plot_animation(plot_data):
                               "active_listing_count": "Active Listing Count"},
                       range_y=[60000, 1600000])
     plot.update_layout(title={'x': 0.5, 'xanchor': 'center'})
-    plot.write_html("graph.html")
+    plot.write_html("r3.html")
+    plot.show()
 
 
 def match_date_to_column(arg, data):
     '''
-    Matches...
+    Matches the date in the column 'month_date_yyyymm' in the
+    given row arg to the column name with the same date and
+    returns the zillow average house price at that date.
+    Will return NaN if the date in the 'month_date_yyyymm'
+    column for the given row is NaN.
     '''
     if math.isnan(arg.month_date_yyyymm):
         return math.nan
@@ -54,7 +73,7 @@ def reformat_date(date):
     return month + '/' + str(year)
 
 
-def filter_data(data):
+def get_animation_data(data):
     '''
     Filters and alters the combined zillow and realtor data from
     data_process.py to make it useful to solving research question 3.
@@ -76,15 +95,3 @@ def filter_data(data):
                             ascending=[False, False])
     data.to_csv('r3_data.csv')
     return data
-
-
-def main():
-    zillow_data = pd.read_csv('zillow_data.csv')
-    realtor_data = pd.read_csv('realtor_historical.csv')
-    new_data = process_data(zillow_data, realtor_data)
-    plot_data = filter_data(new_data)
-    plot_animation(plot_data)
-
-
-if __name__ == '__main__':
-    main()

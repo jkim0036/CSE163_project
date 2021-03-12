@@ -1,8 +1,16 @@
+"""
+CSE 163
+James Chen, Julia Kim, Minjie Kim
+
+This file calculates the percent change of the median
+house prices from month to month for the years 2016 - Jan 2021.
+The percent changes are also graph on a time series plot for
+each state.
+"""
 import pandas as pd
 import plotly.graph_objs as go
 from datetime import datetime
 import math
-from data_process import process_data
 from solve_r3 import match_date_to_column
 
 
@@ -45,7 +53,7 @@ def transform_data(data):
                           index='date')
 
 
-def plot_data(data):
+def plot_timeseries(data):
     fig = go.Figure()
     for column in list(data.columns):
         fig.add_trace(
@@ -133,17 +141,14 @@ def plot_data(data):
             )
         ]
     )
-
+    fig.write_html("r1.html")
     fig.show()
 
 
-def main():
-    zillow_data = pd.read_csv('zillow_data.csv')
-    realtor_data = pd.read_csv('realtor_historical.csv')
-    rq1 = process_data(zillow_data, realtor_data)
-    rq1 = transform_data(rq1)
-    plot_data(rq1)
 
+# def main():
+#   zillow_data = pd.read_csv('zillow_data.csv')
+#   realtor_data = pd.read_csv('realtor_historical.csv')
+#    rq1 = process_data(zillow_data, realtor_data)
+### #
 
-if __name__ == '__main__':
-    main()

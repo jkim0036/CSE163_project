@@ -1,9 +1,21 @@
+'''
+CSE 163
+James Chen, Julia Kim, Minjie Kim
+
+A file that tests the functions in solve_r3 to verify
+that the data processing is correct.
+'''
+
 import pandas as pd
 from solve_r3 import match_date_to_column
 from data_process import process_data
 
 
 def assert_equals(first, second):
+    '''
+    Checks to see if the first value is equivalent to the
+    second. Prints out error messages if they are unequal.
+    '''
     if first != second:
         print("expected: " + str(second))
         print("received: " + str(first))

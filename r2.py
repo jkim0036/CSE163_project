@@ -1,28 +1,27 @@
+'''
+CSE 163
+James Chen, Julia Kim, Minjie Kim
+
+A file that gives insight into the housing market in
+Washington State for each month based on historical
+data from Zillow and Realtor. This pulls together
+various datasets and culminates in a plot of Washington
+counties with the ability to hover over a month and see
+information regarding average days on the market and price
+for a typical home in that county.
+'''
+
 from urllib.request import urlopen
 import json
 import pandas as pd
 import geopandas as gpd
 import plotly.express as px
 import math
-from calendar import monthrange
-import data_process as dp
+from solve_r3 import match_date_to_column
+
 with urlopen('https://raw.githubusercontent.com/' +
              'plotly/datasets/master/geojson-counties-fips.json') as response:
     counties = json.load(response)
-
-
-# adjusts the zillow data to meet the realtor data
-def match_date_to_column(arg, data):
-    if math.isnan(arg.month_date_yyyymm):
-        return math.nan
-    date = arg.month_date_yyyymm
-    row_num = arg['index']
-    year = int(date // 100)
-    month = int(date % 100)
-    num_days = monthrange(year, month)[1]
-    month = "{:02d}".format(int(date % 100))
-    full_date = str(year) + '-' + month + '-' + str(num_days)
-    return data.loc[row_num, full_date]
 
 
 # helper method to get formatting of months correctly
@@ -49,7 +48,7 @@ def wa_combine(combined_data):
 
     wa_county = combined_data[combined_data['state_r'] == 'WA']
 
-    shape = gpd.read_file('tl_2010_53_tract00.shp')
+    shape = gpd.read_file('tl_2010_53_tract00/tl_2010_53_tract00.shp')
     csv = pd.read_csv('food-access.csv')
     merged_left = shape.merge(csv, left_on='CTIDFP00',
                               right_on='CensusTract', how='left')
@@ -86,8 +85,8 @@ def filter_data(final_data):
 
     group = final_data.groupby(['FIPS',
                                 'month',
-                                'County'])['median_days_on_market',
-                                           'avg_price'].mean()
+                                'County'])[['median_days_on_market',
+                                           'avg_price']].mean()
 
     group['County'] = group.index.get_level_values('County')
     group['FIPS'] = group.index.get_level_values('FIPS')
@@ -106,17 +105,5 @@ def plot_data(group):
                                     'avg_price', 'County'])
     fig.update_geos(fitbounds="locations", visible=False)
     fig.update_layout(title_text='Real Estate Market in Washington by Month')
+    fig.write_html("r2.html")
     fig.show()
-
-
-def main():
-    zillow_data = pd.read_csv('zillow_data.csv')
-    realtor_data = pd.read_csv('realtor_historical.csv')
-    new_data = dp.process_data(zillow_data, realtor_data)
-    total_data = wa_combine(new_data)
-    final_data = filter_data(total_data)
-    plot_data(final_data)
-
-
-if __name__ == '__main__':
-    main()

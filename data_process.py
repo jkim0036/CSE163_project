@@ -1,7 +1,18 @@
+'''
+CSE 163
+James Chen, Julia Kim, Minjie Kim
+
+A file that contains a function to join the zillow
+and realtor data.
+'''
+
 import pandas as pd
 
 
 def process_data(zillow_data, realtor_data):
+    '''
+    Joins the zillow and realtor data on county and state name.
+    '''
     zillow_data_clean = zillow_data
     zillow_data_clean['county_z'] = zillow_data_clean['RegionName']. \
         str.split(' County').str[0].str.lower()
