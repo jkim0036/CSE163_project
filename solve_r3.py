@@ -19,6 +19,7 @@ def plot_animation(plot_data):
     Plots an animated graph showing the changes in house
     prices and days on the market
     over the period of the pandemic (2019-2020).
+    Saves the plot to a file name r3.html.
     '''
     # inverse data to get dates from 2019-2020
     plot_data = plot_data.iloc[::-1]
@@ -63,7 +64,8 @@ def match_date_to_column(arg, data):
 
 def reformat_date(date):
     '''
-    Reformats the given date in a MM/YYYY format.
+    Reformats the given date in a MM/YYYY format and
+    returns the reformatted date.
     Will return NaN if the date given is NaN.
     '''
     if math.isnan(date):
@@ -76,7 +78,10 @@ def reformat_date(date):
 def get_animation_data(data):
     '''
     Filters and alters the combined zillow and realtor data from
-    data_process.py to make it useful to solving research question 3.
+    data_process.py by removing excess columns and adding columns
+    for zillow average price, a reformatted date, and the total
+    average price.
+    Returns the filtered and altered data.
     '''
     data['index'] = data.index
     data['zillow_avg_price'] = data.apply(match_date_to_column, data=data,

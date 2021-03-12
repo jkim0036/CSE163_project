@@ -11,7 +11,8 @@ import pandas as pd
 
 def process_data(zillow_data, realtor_data):
     '''
-    Joins the zillow and realtor data on county and state name.
+    Combines the zillow and realtor data on county and state name.
+    Returns the combined data.
     '''
     zillow_data_clean = zillow_data
     zillow_data_clean['county_z'] = zillow_data_clean['RegionName']. \

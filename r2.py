@@ -24,16 +24,24 @@ with urlopen('https://raw.githubusercontent.com/' +
     counties = json.load(response)
 
 
-# helper method to get formatting of months correctly
 def get_month(date):
+    '''
+    Returns the month formatted in mm format.
+    Will return NaN if the date given is NaN.
+    '''
     if math.isnan(date):
         return math.nan
     month = "{:02d}".format(int(date % 100))
     return month
 
 
-# combine washington data with zillow/realtor data
+
 def wa_combine(combined_data):
+    '''
+    Combines washington data with zillow/realtor data and
+    adds columns for zillow average price, month, and county.
+    Returns the combined data.
+    '''
     combined_data['index'] = combined_data.index
     combined_data['zillow_avg_price'] = combined_data.apply(
                                             match_date_to_column,
@@ -68,8 +76,12 @@ def wa_combine(combined_data):
     return final_data
 
 
-# filter the data to be graphed and plotted
 def filter_data(final_data):
+    '''
+    Filters the data passed in to be plotted by adding
+    FIPS, avg_price, County, and month columns.
+    Returns the filtered data.
+    '''
     final_data['FIPS'] = final_data['STATEFP00'] + final_data['COUNTYFP00']
     final_data = final_data.drop(['STATEFP00',
                                   'COUNTYFP00',
@@ -95,8 +107,10 @@ def filter_data(final_data):
     return group
 
 
-# plot the data
 def plot_data(group):
+    '''
+    Plots the data and saves it to a file name r2.html.
+    '''
     fig = px.choropleth(group, geojson=counties,
                         facet_col="month",
                         facet_col_wrap=3,
