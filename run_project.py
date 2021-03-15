@@ -14,7 +14,7 @@ on the market for homes in different counties.
 import pandas as pd
 from solve_r3 import get_animation_data, plot_animation
 from data_process import process_data
-from RQ1 import transform_data, plot_timeseries
+from rq1 import transform_data, plot_timeseries
 from r2 import wa_combine, filter_data, plot_data
 
 
