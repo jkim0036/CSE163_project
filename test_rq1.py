@@ -7,18 +7,17 @@ in rq1
 '''
 import pandas as pd
 from data_process import process_data
-from RQ1 import transform_data
+from rq1 import transform_data
 
 
-def test_pct_change(data, test_data):
-    test = list(test_data['WA'])
-    test = test.reverse()
+def test_pct_diff(data, test_data):
+    test = list(test_data['Mean Price'])
     testing = list(data['WA'])
     testing = testing[41:54]
     length = len(testing)
-    for i in range(0, length):
-        diff = test[i] - testing[i]
-        if (diff > 0.015) | (diff < -0.015):
+    for i in range(length):
+        diff = abs(test[i] - testing[i]) / testing[i]
+        if diff > 0.05:
             return False
     return True
 
@@ -29,7 +28,7 @@ def main():
     data = process_data(zillow_data, realtor_data)
     data = transform_data(data)
     test_data = pd.read_csv('test_rq1.csv')
-    works = test_pct_change(data, test_data)
+    works = test_pct_diff(data, test_data)
     if works:
         print('All is good!')
     else:
