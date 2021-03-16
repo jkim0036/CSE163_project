@@ -75,9 +75,9 @@ def plot_timeseries(data):
     great_lakes = set(['WI', 'IL', 'IN', 'MI', 'OH'])
     se = set(['AR', 'LA', 'KY', 'TN', 'MS', 'AL', 'GA', 'FL', 'WV', 'VA', 'NC',
               'SC'])
-    me = set(['PA', 'NY', 'NJ', 'DE', 'MD'])
+    me = set(['PA', 'NY', 'NJ', 'DE', 'MD', 'DC'])
     ne = set(['ME', 'NH', 'VT', 'MA', 'RI', 'CT'])
-    tech = set(['CO', 'WA', 'WI', 'VA', 'NC', 'MA', 'NY', 'CA', 'MI'])
+    tech = set(['CO', 'WA', 'WI', 'VA', 'NC', 'MA', 'NY', 'CA', 'MI', 'DC'])
     # Start figure
     fig = go.Figure()
     for state in cols:
