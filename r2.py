@@ -35,7 +35,6 @@ def get_month(date):
     return month
 
 
-
 def wa_combine(combined_data):
     '''
     Combines washington data with zillow/realtor data and
