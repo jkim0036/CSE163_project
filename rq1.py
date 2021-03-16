@@ -14,7 +14,11 @@ import math
 from solve_r3 import match_date_to_column
 
 
-def reformat_date(date):
+def _reformat_date(date):
+    '''
+    Makes the date from number/string to a
+    Date object
+    '''
     if math.isnan(date):
         return math.nan
     year = int(date // 100)
@@ -24,6 +28,10 @@ def reformat_date(date):
 
 
 def _listing_price(arg, data):
+    '''
+    Calculates the average listing price between
+    Zillow's and Realtor's data
+    '''
     if math.isnan(arg.zillow_avg_price):
         return arg.median_listing_price
     elif math.isnan(arg.median_listing_price):
@@ -33,6 +41,10 @@ def _listing_price(arg, data):
 
 
 def transform_data(data):
+    '''
+    Makes adjustments to the dataframe so that the dates are row indexes
+    and states are the column names with the mean list price as the data
+    '''
     dates = data.loc[:, '2016-01-31':'2021-01-31']
     prices = data.loc[:, ['month_date_yyyymm', 'median_listing_price',
                       'state_r']]
@@ -40,7 +52,7 @@ def transform_data(data):
     rq1['index'] = rq1.index
     rq1['zillow_avg_price'] = rq1.apply(match_date_to_column, data=rq1, axis=1)
     rq1 = rq1.loc[:, 'month_date_yyyymm':'zillow_avg_price']
-    rq1['month_date_yyyymm'] = rq1['month_date_yyyymm'].apply(reformat_date)
+    rq1['month_date_yyyymm'] = rq1['month_date_yyyymm'].apply(_reformat_date)
     rq1['median_price_zr'] = rq1.apply(_listing_price, data=rq1, axis=1)
     rq1 = rq1.sort_values('month_date_yyyymm')
     rq1 = rq1.loc[:, ['month_date_yyyymm', 'state_r', 'median_price_zr']]
@@ -51,6 +63,9 @@ def transform_data(data):
 
 
 def plot_timeseries(data):
+    '''
+    Plots the mean house prices from month to month for each state.
+    '''
     cols = list(data.columns)
     # Sets for list comprehension for graph legends
     far_west = set(['WA', 'OR', 'CA', 'NV', 'HI', 'AK'])

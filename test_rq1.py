@@ -11,6 +11,10 @@ from rq1 import transform_data
 
 
 def test_pct_diff(data, test_data):
+    '''
+    This function tests whether or not the Mean prices
+    is similar to the actual mean price
+    '''
     test = list(test_data['Mean Price'])
     testing = list(data['WA'])
     testing = testing[41:54]
