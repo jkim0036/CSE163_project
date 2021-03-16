@@ -93,7 +93,7 @@ def plot_timeseries(data):
     fig.update_layout(
         width=1500,
         height=900,
-        title_text='Median House Prices (month to month) \
+        title_text='Mean House Prices (month to month) \
                     from 2016 -2021',
         xaxis_title='Date',
         yaxis_title='Price in USD'
