@@ -11,7 +11,7 @@ We are using data from Realtor (https://www.realtor.com/research/data/).  To get
 
 We are also using data from Zillow (https://www.zillow.com/research/data/).  To get the dataset that we are using, go to the Home Values section under Housing Data and under data type choose: ZHVI (SFR, Condo/Co-op) Time series, Smoothed, Seasonally Adjusted($) and under geography choose: County and download to get dataset.
 
-We also used the census tract files from Take Home Assessment 5 to graph our results for our second research question.
+We also used the census tract files and food-access.csv from Take Home Assessment 5 to graph our results for our second research question.
 
 Setup to run:
 Depending on the setup of your environment and what libriaries are already
